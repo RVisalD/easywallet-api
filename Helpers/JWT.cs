@@ -10,7 +10,7 @@ public static class JWT
     private const string SecretKey = "ratanakvisal-duong-super-secret-key-32";
     private const int ExpiryDurationInHours = 24;
 
-    public static string GenerateToken(int userId)
+    public static string GenerateToken(String userId)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

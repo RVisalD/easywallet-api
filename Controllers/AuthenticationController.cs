@@ -12,7 +12,7 @@ namespace easywallet_api.Controllers;
 [ApiController]
 [Route("api/auth")]
 
-public class AuthenticationController: ControllerBase
+public class AuthenticationController : ControllerBase
 {
 
     private readonly UserContext _context;
@@ -22,7 +22,7 @@ public class AuthenticationController: ControllerBase
         _context = context;
     }
 
-   [HttpPost("login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var user = await _context.Users
@@ -32,14 +32,19 @@ public class AuthenticationController: ControllerBase
         {
             return Unauthorized(BaseResponse<object>.FailResponse("Invalid phone number or password."));
         }
-        var token = JWT.GenerateToken(user.Id);
-        var response = new UserResponseDto(user.PhoneNumber, user.FirstName, user.LastName, token);
+        var token = JWT.GenerateToken(user.UID);
+        var response = new UserResponseDto(user.UID, user.PhoneNumber, user.FirstName, user.LastName, token);
         return Ok(BaseResponse<UserResponseDto>.SuccessResponse(response, "Login successful."));
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
 
         if (await _context.Users.AnyAsync(u => u.PhoneNumber == dto.PhoneNumber))
         {
@@ -50,8 +55,9 @@ public class AuthenticationController: ControllerBase
 
         var user = new User
         {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
+            UID = Guid.NewGuid().ToString("N"),
+            FirstName = dto.FirstName.ToUpper(),
+            LastName = dto.LastName.ToUpper(),
             PhoneNumber = dto.PhoneNumber,
             PasswordHash = passwordHash
         };

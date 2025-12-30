@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "kIpjJ+8PHf7U+ll9AjLAMe6g+xH3bUGlnjsT7zrjdck=",
+  "Source": "easywallet-api",
+  "BasePath": "_content/easywallet-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
